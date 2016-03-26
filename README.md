@@ -1,8 +1,10 @@
 <h1>Installation</h1>
 php composer.phar install
+<br />
 npm install bower -g
+<br />
 bower install
-<h1>Required<h1>
+<h1>Requirements</h1>
 PHP => 5.5
 <br /><br />
 CMF+CMS (2in1)
