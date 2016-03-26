@@ -1,15 +1,19 @@
 <?php
 
 $config['pathViews'] = __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR;
-$config['viewSufix'] = '.phtml';
+$config['viewSuffix'] = '.phtml';
 $config['rootPath'] = __DIR__;
 
 $config['routes'] = [
+    'home' => ['controller' => "\\Module\\MainPage\\Controller\\MainPage", 'method' => 'index'],
     'default' => ['controller' => "\\Module\\Comment\\Controller\\Comment", 'method' => 'index'],
 
-    'edit' => ['controller' => "\\Module\\Comment\\Controller\\Admin", 'method' => 'adminCommentEdit'],
-    'add' => ['controller' => "\\Module\\Comment\\Controller\\Comment", 'method' => 'add'],
-
+    'comments' => ['controller' => "\\Module\\Comment\\Controller\\Comment", 'method' => 'index'],
+    'comment/edit' => ['controller' => "\\Module\\Comment\\Controller\\Admin", 'method' => 'adminCommentEdit'],
+    'comment/add' => ['controller' => "\\Module\\Comment\\Controller\\Comment", 'method' => 'add'],
+    'comment/login' => ['controller' => "\\Module\\Comment\\Controller\\Admin", 'method' => 'login'],
+    'comment/logout' => ['controller' => "\\Module\\Comment\\Controller\\Admin", 'method' => 'logout'],
+    'comment/admin' => ['controller' => "\\Module\\Comment\\Controller\\Admin", 'method' => 'admin'],
 
     'login' => ['controller' => "\\Module\\Dashboard\\Controller\\Admin", 'method' => 'index'],
     'admin' => ['controller' => "\\Module\\Dashboard\\Controller\\Admin", 'method' => 'index'],

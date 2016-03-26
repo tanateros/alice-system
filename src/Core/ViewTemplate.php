@@ -13,15 +13,31 @@ class ViewTemplate implements ViewInterface
     function __construct ($view) {
         $this->view = $view;
     }
+
     /**
-     * @param $view
-     * @param array | null $data
+     * @param string $view
+     * @param array $data
      */
     function show($view, $data = [])
     {
         $config = Application::$config;
-        require $config['pathViews'] . 'header' . $config['viewSufix'];
-        require $config['pathViews'] . (isset($this->view) ? $this->view : $view) . $config['viewSufix'];
-        require $config['pathViews'] . 'footer' . $config['viewSufix'];
+
+        $pathTwigTemplate = explode(DIRECTORY_SEPARATOR, __DIR__ . DIRECTORY_SEPARATOR . (isset($this->view) ? $this->view : $view));
+        $templateFile = $pathTwigTemplate[count($pathTwigTemplate) - 1];
+        unset($pathTwigTemplate[count($pathTwigTemplate) - 1]);
+        $pathTwigTemplate = implode(DIRECTORY_SEPARATOR, $pathTwigTemplate);
+
+        $loader = new \Twig_Loader_Filesystem(array($config['pathViews'], $pathTwigTemplate));
+        $twig = new \Twig_Environment($loader, array('debug' => true));
+
+        $data['app']['session'] = $_SESSION;
+        $data['app']['get'] = $_GET;
+        $data['app']['post'] = $_POST;
+        $data['app']['request'] = $_REQUEST;
+        $data['app']['server'] = $_SERVER;
+
+        echo $twig->render('header' . $config['viewSuffix'], $data);
+        echo $twig->render($templateFile . $config['viewSuffix'], $data);
+        echo $twig->render('footer' . $config['viewSuffix'], $data);
     }
 }

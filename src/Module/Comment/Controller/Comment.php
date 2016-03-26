@@ -2,7 +2,6 @@
 
 namespace Module\Comment\Controller;
 
-use Core\Request as Request;
 use Core\Response as Response;
 use Module\Comment\Model\Comment as CommentModel;
 use Core\ViewTemplate as ViewTemplate;
@@ -20,7 +19,7 @@ class Comment
     {
         // $res = $em->getRepository('Module\Comment\Entity\comments')->findBy(array('id' => 1));
         $commentModel = new CommentModel();
-        $data = $commentModel->showAll();
+        $data['comments'] = $commentModel->showAll();
         $view = new ViewTemplate('..\Module\Comment\View\new-comment');
         return new Response($view, $data);
     }

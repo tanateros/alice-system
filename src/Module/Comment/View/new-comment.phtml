@@ -1,36 +1,33 @@
-<?php if (!$_GET['route'] || $_GET['route'] == 'comment') {
-    require 'comments.phtml'; ?>
-<?php } ?>
+{% if app.get.route or app.get.route != 'comment' %}
+    {% include 'comments.phtml' %}
+{% endif %}
 
-<?php if ($_GET['route'] == 'edit') { ?>
-    <form role="form" action="/edit&id=<?php echo $data[0]->id; ?>"  accept-charset="UTF-8" method="post" id="addComment">
-<?php } else { ?>
-    <form role="form" action="/add"  accept-charset="UTF-8" method="post" id="addComment">
-<?php } ?>
+{% if app.get.route == 'comment/edit' %}
+    <form role="form" action="/comment/edit&id={{ editComment.0.id }}"  accept-charset="UTF-8" method="post" id="addComment">
+{% else %}
+    <form role="form" action="/comment/add"  accept-charset="UTF-8" method="post" id="addComment">
+{% endif %}
     <div class="form-group">
         <label>Имя</label>
         <input type="text" class="form-control" name="name" id="name" placeholder="Имя"
-               value="<?php if (isset($data[0]->name) && $_GET['route'] == 'edit') echo $data[0]->name; ?>"/>
+               value="{% if editComment.0.getName() %}{{ editComment.0.getName }}{% endif %}"/>
     </div>
     <div class="form-group">
         <label>E-mail</label>
         <input type="email" class="form-control" name="email" id="email" placeholder="E-mail"
-               value="<?php if (isset($data[0]->email) && $_GET['route'] == 'edit') echo $data[0]->email; ?>"/>
+               value="{% if editComment.0.getEmail() %}{{ editComment.0.getEmail }}{% endif %}"/>
     </div>
     <div class="form-group">
         <label>Текст сообщения</label>
-        <textarea id="text" class="form-control" name="text" rows="3"><?php if (isset($data[0]->text) && $_GET['route'] == 'edit') echo $data[0]->text; ?></textarea>
+        <textarea id="text" class="form-control" name="text" rows="3">{% if editComment.0.getText() %}{{ editComment.0.getText }}{% endif %}</textarea>
     </div>
-<?php if ($_GET['route'] == 'edit') { ?>
-    <button class="btn btn-success">Изменить</button>
-<? } ?>
+    {% if app.get.route == 'comment/edit' %}
+        <button class="btn btn-success">Изменить</button>
+    {% endif %}
     </form>
 
-<?php if ($_GET['route'] != 'edit') {
-    require 'preview.phtml'; ?>
-    <button data-toggle="modal" data-target="#previewModal" id="preview" class="btn btn-primary">Предварительный
-        просмотр
-    </button>
+{% if app.get.route or app.get.route != 'comment' %}
+    {% include 'preview.phtml' %}
+    <button data-toggle="modal" data-target="#previewModal" id="preview" class="btn btn-primary">Предварительный просмотр</button>
     <button id="send" class="btn btn-success">Отправить</button>
-<?php } else { ?>
-<?php } ?>
+{% endif %}

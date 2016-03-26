@@ -20,8 +20,18 @@ class Template implements ViewInterface
     function show($view, $data = [])
     {
         $config = Application::$config;
-        require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'header' . $config['viewSufix'];
-        require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . $view . $config['viewSufix'];
-        require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'footer' . $config['viewSufix'];
+
+        $pathTwigTemplate = explode(DIRECTORY_SEPARATOR, __DIR__ . DIRECTORY_SEPARATOR . (isset($this->view) ? $this->view : $view));
+        $templateFile = $pathTwigTemplate[count($pathTwigTemplate) - 1];
+        unset($pathTwigTemplate[count($pathTwigTemplate) - 1]);
+        $pathTwigTemplate = implode(DIRECTORY_SEPARATOR, $pathTwigTemplate);
+
+        $loader = new \Twig_Loader_Filesystem(array(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR, $pathTwigTemplate));
+        $twig = new \Twig_Environment($loader, array('debug' => true));
+
+        $data['app']['session'] = $_SESSION;
+        echo $twig->render('header' . $config['viewSuffix'], $data);
+        echo $twig->render($templateFile . $config['viewSuffix'], $data);
+        echo $twig->render('footer' . $config['viewSuffix'], $data);
     }
 }

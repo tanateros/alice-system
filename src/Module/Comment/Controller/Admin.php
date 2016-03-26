@@ -2,10 +2,11 @@
 
 namespace Module\Comment\Controller;
 
-// use Module\Comment\Model\Comment as CommentModel;
 use Core\Request as Request;
 use Core\Response as Response;
 use Core\Session as Session;
+use Module\Comment\Model\Comment as CommentModel;
+use Core\ViewTemplate as ViewTemplate;
 
 /**
  * Class Admin
@@ -22,20 +23,22 @@ class Admin
         $session = new Session();
         if ($request->post('login') == 'admin' && $request->post('password') == '123') {
             $session->set('isAdmin', true);
-            header("Location: /admin");
+            header("Location: /comment/admin");
         } else {
-            return new Response('..\Module\Comment\View\login');
+            $view = new ViewTemplate('..\Module\Comment\View\login');
+            return new Response($view);
         }
     }
-/*
+
     function admin()
     {
         if ($_SESSION['isAdmin']) {
-            $modelComment = new CommentModel();
-            $data = $modelComment->showAll(!isset($_GET['order']) ?: $_GET['order']);
-            echo View::show('..\Module\Comment\View\admin-comments', $data);
+            $commentModel = new CommentModel();
+            $data['comments'] = $commentModel->showAll();
+            $view = new ViewTemplate('..\Module\Comment\View\admin-comments');
+            return new Response($view, $data);
         } else {
-            header("Location: /login");
+            header("Location: /comment/login");
         }
     }
 
@@ -47,17 +50,17 @@ class Admin
             if (!empty($_POST)) {
                 $modelComment->edit($id, $_POST);
             }
-            $data = $modelComment->getId($id);
-            echo View::show('..\Module\Comment\View\new-comment', $data);
+            $data['editComment'] = $modelComment->getId($id);
+            // echo View::show('..\Module\Comment\View\new-comment', $data);
+            $view = new ViewTemplate('..\Module\Comment\View\new-comment');
+            return new Response($view, $data);
         } else {
-            header("Location: /login");
+            header("Location: /comment/login");
         }
     }
-*/
-
     function logout()
     {
         Session::destroy();
-        header("Location: /login");
+        header("Location: /comment/login");
     }
 }

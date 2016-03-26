@@ -1,3 +1,10 @@
+<h1>Installation</h1>
+php composer.phar install
+npm install bower -g
+bower install
+<h1>Required<h1>
+PHP => 5.5
+<br /><br />
 CMF+CMS (2in1)
 
 Желательный рефакторинг:

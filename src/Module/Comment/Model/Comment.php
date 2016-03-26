@@ -51,14 +51,24 @@ class Comment
      * @param array $post
      * @return $this
      */
-    /*
     function edit($id, $post)
     {
+        $commentData = Validate::filterAddCommentPost();
+        $comment = new CommentTable();
+        $comment
+            ->setId((int) $id)
+            ->setName($commentData['name'])
+            ->setEmail($commentData['email'])
+            ->setText($commentData['text']);
+
+        $this->db->merge($comment);
+        $this->db->flush();
+        return $this;
+
         $qry = $this->db->prepare('UPDATE comments SET name=?, email=?, text=? WHERE id=' . $id);
         $qry->execute(array($post['name'], $post['email'], $post['text']));
         return $this;
     }
-    */
 
     /**
      * @return $this
