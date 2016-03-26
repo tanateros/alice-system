@@ -1,0 +1,6 @@
+<?php foreach($data as $current) { ?>
+    <div id="callout-third-party-libs" class="bs-callout bs-callout-warning">
+        <a href="/edit&id=<?php echo $current['id']; ?>" class="btn btn-primary">Редактировать</a><address><a href="mailto:<?php echo $current['email']; ?>"><?php echo $current['name']; ?></a></address>
+        <p><?php echo $current['text']; ?></p>
+    </div>
+<?php } ?>

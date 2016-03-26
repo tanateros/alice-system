@@ -1,0 +1,79 @@
+<div class="col-md-8" id="my-wrap" style="background: #fff; margin-bottom: 10px;">
+<?php /*
+    <script type="text/javascript">
+        function del_page(id_del_page, table){
+            if(confirm('Страница с id='+id_del_page+' будет удалена. Вы уверены?')){
+                $.post(
+                    '<?=base_url();?>index.php/ajax/del_page',
+                    {id_del_page: id_del_page, table: table},
+                    function(data) {
+                        $('#resultdel').html(data);
+                    }
+                );
+            }
+        }
+    </script>
+*/ ?>
+    <div id="resultdel"></div>
+    <h2><?php $data['title']; ?></h2>
+    <a class="btn btn-success" href="/dashboard/newitem/<?php echo $data['table']; ?>" style="margin-bottom: 10px;">+ Добавить</a>
+    <table class="table table-striped">
+        <tr style="font-weight: bold; background: #900; color: #fff;">
+            <td style="font-weight: bold; background: #900; color: #fff;"><i class="fa fa-edit"></i></td>
+            <td style="font-weight: bold; background: #900; color: #fff;"><i class="fa fa-delete"></i></td>
+            <?php foreach($data['fields'] as $v => $k) { ?>
+                <td <?php if($v =='content' || ($v != 'id' && $v != 'email' && $v != 'create_time' && $v != 'title' && $v != 'link' && $v != 'name_slider' && $v != 'parent_id')) {
+                        echo ' style="max-width: 100px; overflow: hidden; display: none;">';
+                    } else {
+                        echo ' style="font-weight: bold; background: #900; color: #fff;">';
+                    }
+                    echo (isset($data['arrTitleMenu'][$v])) ?  $data['arrTitleMenu'][$v] : $k; ?>
+                </td>
+            <?php } ?>
+        </tr>
+        <?php foreach($data['rows'] as $k=>$v) { ?>
+            <tr>
+                <td>
+                    <a class="btn btn-info" title="Редактировать запись" href="/dashboard/edit/<?php $data['table']; ?>/<?php echo $v->getId(); ?>"><i class="fa fa-edit"></i></a>
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="var id_del_page=<?php echo $v->getId(); ?>, table='<?php echo $data['table']; ?>'; del_page(id_del_page, table);"><i class="fa fa-minus"></i></button>
+                </td>
+                <td>
+                    <?php echo $v->getId(); ?>
+                </td>
+                <td <?php
+                    if($v == 'text' || $v == 'content' || ($v != 'link' && $v != 'email' && $v != 'title' && $v != 'create_time' && $v != 'parent_id' && $v != 'id')) {
+                        echo ' style="max-width: 100px; overflow: hidden; display: none;"';
+                    } ?>>
+                    <? if(strlen($k)>200) {
+                        echo substr(htmlspecialchars_decode(strip_tags($k)),0,200).'...';
+                    } else {
+                        echo htmlspecialchars_decode(strip_tags($k));
+                    }
+                    ?>
+                </td>
+                <td>
+                    <b>
+                        <?php $text = ($v->getTitle() != '') ? $v->getTitle() : '';
+                        if(strlen($text)>200) {
+                            echo substr(htmlspecialchars_decode(strip_tags($text)),0,200).'...';
+                        } else {
+                            echo htmlspecialchars_decode(strip_tags($text));
+                        } ?>
+                    </b>
+                </td>
+                <td>
+                    <b>
+                        <?php $text = ($v->getLink() != '') ? $v->getLink() : '';
+                        if(strlen($text)>200) {
+                            echo substr(htmlspecialchars_decode(strip_tags($text)),0,200).'...';
+                        } else {
+                            echo htmlspecialchars_decode(strip_tags($text));
+                        } ?>
+                    </b>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>

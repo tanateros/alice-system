@@ -1,0 +1,6 @@
+<?php foreach($data as $k=>$current) { ?>
+<div id="callout-third-party-libs" class="bs-callout bs-callout-warning">
+    <address><a href="mailto:<?php echo $current->getEmail(); ?>"><?php echo $current->getName(); ?></a></address>
+    <p><?php echo $current->getText(); ?></p>
+</div>
+<?php } ?>
