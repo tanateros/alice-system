@@ -7,36 +7,58 @@ namespace Core;
  * @package Core
  *
  * @author Tanateros
+ * @todo Class for system core
  */
-class Application {
+class Application
+{
     /**
      * @var array $config
      */
     static public $config;
+     /**
+      * @var string
+      * @todo default route
+      */
+     private $defaultRoute = 'default';
 
-    function __construct($config){
+    /**
+     * @param $config
+     * @todo Constructor Application class. Starting session, initialization global config
+     */
+    function __construct($config)
+    {
         Session::start();
         self::$config = $config;
+
+        foreach ($config as $key => $value) {
+            if (isset($this->{$key})) {
+                $this->{$key} = $value;
+            }
+        }
     }
 
     /**
      * @return mixed
+     * @todo handle method for working application
      */
-    function handle(){
+    function handle()
+    {
         $route = substr($_SERVER['QUERY_STRING'], 6);
-        if(!$route) $route = 'default';
-        $routes = self::$config['routes'];
+        if (!$route) {
+            $route = 'default';
+        }
 
-        $ns = self::$config['routes'][$route];
+        $routes = isset(self::$config['routes']) ? self::$config['routes'] : array($route);
+        $ns = $routes[$route];
 
-        if(!$ns) {
+        if (!$ns) {
             foreach ($routes as $r=>$link) {
                 if(($pos = strpos($route, $r)) !== false) {
                     $ns = self::$config['routes'][$r];
                 }
             }
         }
-        if($ns) {
+        if ($ns && class_exists($ns['controller'])) {
             return (new $ns['controller']())->$ns['method']();
         } else {
             header("HTTP/1.0 404 Not Found");
