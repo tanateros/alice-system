@@ -60,11 +60,10 @@ class Application
         }
         if ($ns && class_exists($ns['controller'])) {
             return (new $ns['controller']())->$ns['method']();
-        } else {
-            header("HTTP/1.0 404 Not Found");
-            header("Status: 404 Not Found");
-            echo 'Error 404';
-            exit;
         }
+        header("HTTP/1.0 404 Not Found");
+        header("Status: 404 Not Found");
+        echo 'Error 404';
+        exit;
     }
 }
